@@ -61,6 +61,9 @@ namespace Minecraft_Clone
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             //GL.Enable(EnableCap.Multisample);
             //GL.Enable(EnableCap.)
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+            GL.FrontFace(FrontFaceDirection.Ccw);
 
             chunkManager = new ChunkManager(aerialCamera);
 

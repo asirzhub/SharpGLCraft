@@ -35,8 +35,12 @@ namespace Minecraft_Clone
 
         public Vector3 CameraPosition() => focusPoint - forward * armDistance;
 
+        bool dirty = false;
+
         private void UpdateVectors()
         { 
+            if (!dirty) return;
+            
             if (pitch > 20f) pitch = 20f; // prevent looking "upward"
             if (pitch < -85f) pitch = -85f;
 
@@ -91,7 +95,9 @@ namespace Minecraft_Clone
             {
                 var deltaX = mouse.X - lastPos.X;
                 var deltaY = mouse.Y - lastPos.Y;
-                lastPos = new Vector2(mouse.X, mouse.Y);
+                lastPos = new Vector2(mouse.X, mouse.Y);                
+
+                if(MathF.Abs(deltaX) > 0.01f || MathF.Abs(deltaY) > 0.01f ) dirty = true;
 
                 yaw += deltaX * sensitivity * (float)e.Time;
                 pitch -= deltaY * sensitivity * (float)e.Time;
