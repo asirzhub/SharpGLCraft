@@ -2,7 +2,6 @@
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Concurrent;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Minecraft_Clone.World.Chunks
 {
@@ -24,7 +23,7 @@ namespace Minecraft_Clone.World.Chunks
 
         public Shader shadowMapShader;
         FBOShadowMap fboShadowMap;
-        int shadowMapResolution = 2048;
+        int shadowMapResolution = 4096;
 
         Matrix4 shadowMapViewMatrix = new();
         Matrix4 shadowMapProjMatrix = new();
@@ -53,6 +52,7 @@ namespace Minecraft_Clone.World.Chunks
         }
 
 
+        readonly List<Vector3i> visibleIndexes = new List<Vector3i>();
 
         public void RenderLightingPass(AerialCameraRig camera, float time, ConcurrentDictionary<Vector3i, Chunk> chunks, SkyRender skyRender, float seaLevel)
         {
@@ -64,8 +64,8 @@ namespace Minecraft_Clone.World.Chunks
 
             // THEN render chunks
             Bind();
-            List<Vector3i> visibleIndexes = new List<Vector3i>();
 
+            visibleIndexes.Clear();
 
             blockShader.SetVector3("u_sunColor", skyRender.sunColor * 1.5f);
             blockShader.SetVector3("cameraPos", (camera.CameraPosition()));// + camera.focusPoint)/2.0f);
@@ -82,6 +82,11 @@ namespace Minecraft_Clone.World.Chunks
             blockShader.SetVector3("u_horizonColor", skyRender.finalH);
             blockShader.SetVector3("u_zenithColor", skyRender.finalZ);
             blockShader.SetVector3("u_sunsetColor", skyRender.sunsetColor);
+            
+            Matrix4 view = camera.GetViewMatrix();
+            Matrix4 projection = camera.GetProjectionMatrix();
+            blockShader.SetMatrix4("view", view);
+            blockShader.SetMatrix4("projection", projection);
 
             // render all chunks non-transparent mesh
             foreach (var kvp in chunks)
@@ -113,12 +118,8 @@ namespace Minecraft_Clone.World.Chunks
 
             //with everything prepped, we can now render
             Matrix4 model = Matrix4.CreateTranslation(index*(Chunk.SIZE));
-            Matrix4 view = camera.GetViewMatrix();
-            Matrix4 projection = camera.GetProjectionMatrix();
 
             blockShader.SetMatrix4("model", model);
-            blockShader.SetMatrix4("view", view);
-            blockShader.SetMatrix4("projection", projection);
             blockShader.SetMatrix4("lightProjMat", shadowMapProjMatrix);
             blockShader.SetMatrix4("lightViewMat", shadowMapViewMatrix);
 
@@ -145,14 +146,13 @@ namespace Minecraft_Clone.World.Chunks
 
             shadowMapShader.Bind();
 
-            List<Vector3i> visibleIndexes = new List<Vector3i>();
+            visibleIndexes.Clear();
 
             // position the light 500 units away in the direction of the sun, looking at the place the camera looks at. use ortho projection
             shadowMapViewMatrix = Matrix4.LookAt(camera.focusPoint + 500f * skyRender.sunDirection, 
                 camera.focusPoint , 
                 Vector3.UnitZ);
             shadowMapProjMatrix = Matrix4.CreateOrthographic(camera.armDistance*3, camera.armDistance * 2, 0.01f, 2000f);
-
             
             Matrix4 view = shadowMapViewMatrix;
             Matrix4 projection = shadowMapProjMatrix;
@@ -184,10 +184,7 @@ namespace Minecraft_Clone.World.Chunks
         bool RenderChunkShadowMap(MeshData mesh, Vector3i index, float time, SkyRender sky)
         {
             // exit if there's no mesh data
-            if (mesh == null || mesh.Vertices.Count == 0) return false;
-
-
-            var sunDirection = sky.sunDirection;
+            if (mesh == null || mesh.Vertices.Count == 0) return false;        
             
             Matrix4 model = Matrix4.CreateTranslation(index * (Chunk.SIZE));
 
