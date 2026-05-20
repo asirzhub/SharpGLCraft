@@ -147,19 +147,19 @@ namespace Minecraft_Clone.World
 
         public float GetNoiseAt(NoiseLayer layer, int x, int z)
         {
-            if (!noiseCaches.TryGetValue(layer, out var cache))
-            {
-                cache = new ConcurrentDictionary<Vector2i, NoiseCacheEntry>();
-                noiseCaches.TryAdd(layer, cache);
-            }
+            // if (!noiseCaches.TryGetValue(layer, out var cache))
+            // {
+            //     cache = new ConcurrentDictionary<Vector2i, NoiseCacheEntry>();
+            //     noiseCaches.TryAdd(layer, cache);
+            // }
 
-            var key = new Vector2i(x, z);
+            // var key = new Vector2i(x, z);
 
-            if (cache.TryGetValue(key, out var entry))
-            {
-                cache[key] = new NoiseCacheEntry(entry.value, frameCount);
-                return entry.value;
-            }
+            // if (cache.TryGetValue(key, out var entry))
+            // {
+            //     cache[key] = new NoiseCacheEntry(entry.value, frameCount);
+            //     return entry.value;
+            // }
 
             float result;
 
@@ -181,7 +181,7 @@ namespace Minecraft_Clone.World
             }
 
             //New entries should have a fresh timestamp
-            cache[key] = new NoiseCacheEntry(result, frameCount);
+            //cache[key] = new NoiseCacheEntry(result, frameCount);
             return result;
         }
 

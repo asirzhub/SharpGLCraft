@@ -66,10 +66,22 @@ namespace Minecraft_Clone.Graphics
         public void UnBind() => GL.UseProgram(0);
         public void Delete() => GL.DeleteShader(ID);
 
+        Dictionary<string, int> uniformCache = [];
+        int GetUniformLocationCached(string name)
+        {            
+            if(uniformCache.ContainsKey(name))
+                return uniformCache[name];
+
+            int loc = GL.GetUniformLocation(ID, name);
+            uniformCache.Add(name, loc);
+            return loc;            
+        }
+
         // a series of functions to make it easier to pass values into the shader
         public void SetMatrix4(string name, Matrix4 value)
-        {
-            int loc = GL.GetUniformLocation(ID, name);
+        {            
+            int loc = GetUniformLocationCached(name);
+
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else
@@ -78,7 +90,8 @@ namespace Minecraft_Clone.Graphics
 
         public void SetMatrix3(string name, Matrix3 value)
         {
-            int loc = GL.GetUniformLocation(ID, name);
+            int loc = GetUniformLocationCached(name);
+
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else
@@ -87,7 +100,8 @@ namespace Minecraft_Clone.Graphics
 
         public void SetFloat(string name, float value)
         {
-            int loc = GL.GetUniformLocation(ID, name);
+            int loc = GetUniformLocationCached(name);
+
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else
@@ -95,7 +109,8 @@ namespace Minecraft_Clone.Graphics
         }
         public void SetInt(string name, int value)
         {
-            int loc = GL.GetUniformLocation(ID, name);
+            int loc = GetUniformLocationCached(name);
+
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else
@@ -103,7 +118,8 @@ namespace Minecraft_Clone.Graphics
         }
         public void SetVector3(string name, Vector3 value)
         {
-            int loc = GL.GetUniformLocation(ID, name);
+            int loc = GetUniformLocationCached(name);
+            
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else
@@ -112,7 +128,8 @@ namespace Minecraft_Clone.Graphics
 
         public void SetVector4(string name, Vector4 value)
         {
-            int loc = GL.GetUniformLocation(ID, name);
+            int loc = GetUniformLocationCached(name);
+
             if (loc == -1)
                 Console.WriteLine($"[Shader Warning] Uniform '{name}' not found in shader {ID}.");
             else

@@ -10,7 +10,6 @@ namespace Minecraft_Clone.Graphics
 
         public void Bind() {
             GL.BindTexture(TextureTarget.Texture2D, ID);
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D); 
         }
         public static void UnBind() => GL.BindTexture(TextureTarget.Texture2D, 0);
         public void Delete() => GL.DeleteTexture(ID);
@@ -23,6 +22,8 @@ namespace Minecraft_Clone.Graphics
             ID = GL.GenTexture();
             Bind();
 
+            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D); 
+            
             // texture params
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
             GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);

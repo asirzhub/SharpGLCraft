@@ -2,7 +2,10 @@
 
 This is an OpenGL Minecraft clone that uses C#. It is made possible via OpenTK, which is a C# binding layer for OpenGL. 
 
-![https://github.com/asirzhub/MinecraftClone/Thumbnail.png](https://github.com/asirzhub/MinecraftClone/blob/main/Thumbnail1.png "A screenshot of the current state.")
+## Screenshots
+![https://github.com/asirzhub/MinecraftClone/daytime.png](https://github.com/asirzhub/MinecraftClone/blob/main/daytime.png "Daytime screenshot.")
+![https://github.com/asirzhub/MinecraftClone/daytime.png](https://github.com/asirzhub/MinecraftClone/blob/main/godrays.png "Closeup of godrays.")
+![https://github.com/asirzhub/MinecraftClone/daytime.png](https://github.com/asirzhub/MinecraftClone/blob/main/sunset.png "Sunsets are stunning.")
 
 ## Development Roadmap
 1. ~~Base-layer absolute minimum engine with chunk generation, camera, and rendering of chunks.~~
