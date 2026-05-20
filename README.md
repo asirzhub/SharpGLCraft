@@ -1,4 +1,6 @@
-# MinecraftClone 
+# SharpGLCraft
+
+This is an OpenGL Minecraft clone that uses C#. It is made possible via OpenTK, which is a C# binding layer for OpenGL. 
 
 ![https://github.com/asirzhub/MinecraftClone/Thumbnail.png](https://github.com/asirzhub/MinecraftClone/blob/main/Thumbnail1.png "A screenshot of the current state.")
 
